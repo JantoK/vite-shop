@@ -28,7 +28,7 @@
     >@vuedx</a>.
     <br />Note @vuedx is still experimental and this setup is provided for early feedback.
   </p>
-  <button @click="count++">count is: {{ count }}</button>
+  <a-button type="primary" @click="count++">count is: {{ count }}</a-button>
   <p>
     Edit
     <code>components/HelloWorld.vue</code> to test hot module replacement.
