@@ -1,0 +1,11 @@
+// 全局常量
+$success: rgba(145, 255, 105, 0.8);
+$danger: rgba(245, 105, 105, 0.8);
+
+// 字体样式设置
+@mixin FontStyle($size, $color, $weight, $hight: 1) {
+  font-size: $size;
+  color: $color;
+  font-weight: $weight;
+  line-height: $hight;
+}
