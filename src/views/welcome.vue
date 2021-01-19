@@ -5,13 +5,13 @@
             <img src="/@/assets/images/logo.png">
             <h1>樱淘商城</h1>
           </div>
-          <a-form class="welcome-login-form" 
-                  layout="horizontal" 
-                  :model="account" 
-                  @submit="submitLogin" 
+          <a-form class="welcome-login-form"
+                  layout="horizontal"
+                  :model="account"
+                  @submit="submitLogin"
                   @submit.prevent>
             <a-form-item>
-              <a-input placeholder="username" 
+              <a-input placeholder="username"
                        v-model:value="account.username">
                 <template v-slot:prefix>
                   <user-outlined/>
@@ -19,7 +19,7 @@
               </a-input>
             </a-form-item>
             <a-form-item>
-              <a-input-password placeholder="password" 
+              <a-input-password placeholder="password"
                                 v-model:value="account.password">
                 <template v-slot:prefix>
                   <lock-outlined/>
@@ -43,6 +43,7 @@
 import { defineComponent, reactive, toRefs } from 'vue'
 import { UserOutlined, LockOutlined, EyeOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
+import { useStore } from 'vuex'
 export default defineComponent({
     name: 'Welcome',
     components: { UserOutlined, LockOutlined, EyeOutlined },
@@ -55,38 +56,29 @@ export default defineComponent({
         }
       })
 
-      const login = (params: any) => {
-        return new Promise((resolve, reject)=>{
-          if (params.username === '123' && params.password === '123') {
-            setTimeout(function(){
-              resolve(true)
-            },2000)
-          } else {
-            setTimeout(function(){
-              reject(false)
-            },2000)
-          }
-        })
-      }
+      const store = useStore()
 
       const submitLogin = async () => {
         const { username, password } = state.account
         if(username.trim() === '' || password.trim() === '') return message.warning('用户名或密码不能为空！')
-        const hide = message.loading('登陆中...', 0)
-        state.loading = true
         const params = { username, password }
-        login(params).finally(()=>{
+
+        const hide = message.loading('登陆中...')
+        state.loading = true
+
+        store.dispatch('user/Login', params)
+        .then(res=>{
+          if(res.code === 200) message.success( res?.msg || '登陆成功!')
+          else message.error( res?.msg || '登陆失败!' )
+        })
+        .catch(err=>{
+          message.error('请求失败!请检查网络是否正常!')
+        }).finally(()=>{
           state.loading = false
-          message.destroy()
-        }).then((data)=>{
-          console.log(data)
-          message.success('登录成功！')
-        }).catch((data)=>{
-          console.log(data)
-          message.error('登录失败！')
+          hide()
         })
       }
-      
+
       return {
         ...toRefs(state),
         submitLogin
@@ -107,7 +99,7 @@ export default defineComponent({
     min-width: 400px;
     border-radius: 24px;
     margin: auto auto;
-    text-align: center; 
+    text-align: center;
     &-logo {
       margin-bottom: 14px;
       justify-content: center;
