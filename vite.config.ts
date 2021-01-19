@@ -26,7 +26,7 @@ export default defineConfig({
     cors: true,
     proxy: {
       '/api': {
-        target: ' http://mock.51y.cc:81/mock/6000f462151bfc02d3ba69cf/api',
+        target: 'http://mock.51y.cc:81/mock/6000f462151bfc02d3ba69cf/api',
         changeOrigin: true
       }
     }

@@ -11,7 +11,7 @@ export interface CreateAxiosOptions extends AxiosRequestConfig {
 }
 
 /**
- * @description: 请求配置
+ * @description: 自定义请求配置，在transform中进行定义
  */
 export interface RequestOptions {
     // 请求参数拼接到url
@@ -43,7 +43,7 @@ export interface Result<T = any> {
   code: number;
   type?: 'success' | 'error' | 'warning';
   message: string;
-  result?: T;
+  data?: T;
 }
 
 /**

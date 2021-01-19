@@ -1,20 +1,29 @@
+import { message } from "ant-design-vue";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { check } from "./check";
 import { AxiosTransform, RequestOptions, Result } from "./interface";
 
+/**
+ * @description: 对拦截器等transform的封装
+ */
 export const transform: AxiosTransform = {
 
   /**
    * @description: 请求之前处理可在此处理config操作
    */
   beforeRequestHook: (config: AxiosRequestConfig, options: RequestOptions) => {
-    return config
+    const { apiUrl } = options;
+
+    // api处理
+    config.url = `${apiUrl}${config.url}`
+
+    return config;
   },
 
   /**
      * @description: 请求拦截器处理
      */
   requestInterceptors: (config: AxiosRequestConfig) => {
-    // 请求之前处理config，可以在此进行token等操作
     return config;
   },
 
@@ -22,21 +31,18 @@ export const transform: AxiosTransform = {
    * @description: 处理响应数据
    */
   transformRequestData: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    const { isTransformRequestResult } = options;
+    // const { isTransformRequestResult } = options;
 
-    const { data } = res;
-
-    const {code, result, message} = data;
-
-    // 不进行任何处理，直接返回
-    if (!isTransformRequestResult) {
-      return res.data;
+    if (res?.data) {
+      const { data, code } = res.data;
+      if ( code !== 200 ) { // 请求成功
+        check(code, data?.msg || '请求错误!')
+      }
+    } else {
+      return message.error('网络异常!')
     }
 
-    // 错误的时候返回
-    if (!data) return undefined;
-
-    return data
+    return res.data
   },
 
   /**
