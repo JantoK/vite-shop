@@ -38,18 +38,15 @@ export const transform: AxiosTransform = {
       if ( code !== 200 ) { // 请求成功
         check(code, data?.msg || '请求错误!')
       }
-    } else {
-      return message.error('网络异常!')
     }
 
-    return res.data
+    return res.data || res || false
   },
 
   /**
    * @description: 响应错误处理
    */
   responseInterceptorsCatch: (error: Error) => {
-    console.log(error)
     return error
   }
 }
