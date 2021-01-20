@@ -7,6 +7,8 @@
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
+    "removeComments": true,  // 删除编译后的所有的注释
+    "declaration": true,  // 生成相应的 '.d.ts' 文件
     "lib": ["esnext", "dom"],
     "types": ["vite/client", "node"],
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
